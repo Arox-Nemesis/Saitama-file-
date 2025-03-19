@@ -33,8 +33,8 @@ DB_NAME = os.environ.get("DATABASE_NAME", "Cluster01")
 
 #force sub channel id, if you want enable force sub
 FORCESUB_CHANNEL = int(os.environ.get("FORCESUB_CHANNEL", "-1002108419450"))
-FORCE_SUB_CHANNEL2 = int(os.environ.get("FORCE_SUB_CHANNEL2", "-1001982072622"))
-FORCE_SUB_CHANNELS3 = int(os.environ.get("FORCE_SUB_CHANNELS3", "-1001976541518"))
+FORCE_SUB_CHANNEL = int(os.environ.get("FORCE_SUB_CHANNEL2", "-1001982072622"))
+FORCE_SUB_CHANNELS = int(os.environ.get("FORCE_SUB_CHANNELS3", "-1001976541518"))
 
 TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "4"))
 
