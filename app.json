@@ -41,11 +41,11 @@
       "description": "id of the first channel, if you want enable force sub feature else put 0",
       "value": "0"
      },
-    "FORCESUB_CHANNEL2":{
+    "FORCE_SUB_CHANNEL":{
       "description": "id of the second channel, if you want enable force sub feature else put 0",
       "value": "0"  
       },
-    "FORCESUB_CHANNEL3":{
+    "FORCE_SUB_CHANNELS":{
       "description": "id of your group, if you want enable force sub feature else put 0",
       "value": "0" 
     },
