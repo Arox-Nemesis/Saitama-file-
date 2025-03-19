@@ -7,7 +7,7 @@ import re
 import string
 import time
 import asyncio
-
+import os 
 from pyrogram import Client, filters, __version__
 from pyrogram.enums import ParseMode
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
@@ -23,7 +23,7 @@ from config import (
     PROTECT_CONTENT,
     OWNER_ID,
 )
-from helper_func import subscribed, encode, decode, get_messages, get_shortlink, get_verify_status, update_verify_status, get_exp_time
+from helper_func import subscribed, encode, decode, get_messages, get_exp_time
 from database.database import add_user, del_user, full_userbase, present_user
 from shortzy import Shortzy
 
@@ -46,7 +46,7 @@ async def start_command(client: Client, message: Message):
             except:
                 pass
     text = message.text
-     if len(text) > 7:
+     if len(text)>7:
             try:
                 base64_string = message.text.split(" ", 1)[1]
             except:
@@ -161,9 +161,8 @@ async def not_joined(client: Client, message: Message):
         text = FORCE_MSG.format(
                 first = message.from_user.first_name,
                 last = message.from_user.last_name,
-                username=f"@{message.from_user.username}"
-                if message.from_user.username
-                else None,
+                username = None if not message.from_user.username else '@' + message.from_user.username,
+                mention = message.from_user.mention,
                 id = message.from_user.id
             ),
         reply_markup = InlineKeyboardMarkup(buttons),
