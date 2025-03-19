@@ -23,7 +23,7 @@ from config import (
     PROTECT_CONTENT,
     OWNER_ID,
 )
-from helper_func import subscribed, encode, decode, get_messages, get_exp_time
+from helper_func import subscribed, encode, decode, get_messages,
 from database.database import add_user, del_user, full_userbase, present_user
 from shortzy import Shortzy
 
