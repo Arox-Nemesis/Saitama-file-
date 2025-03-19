@@ -6,20 +6,20 @@ import re
 import asyncio
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
-from config import FORCESUB_CHANNEL, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNELS3, ADMINS
+from config import FORCESUB_CHANNEL, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNELS, ADMINS
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
 from pyrogram.errors import FloodWait
 
 async def is_subscribed(filter, client, update):
     """Check if a user is subscribed to the required channels."""
-    if not any([FORCESUB_CHANNEL, FORCESUB_CHANNEL2, FORCESUB_CHANNEL3]):
+    if not any([FORCESUB_CHANNEL, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNEL]):
         return True
 
     user_id = update.from_user.id
     if user_id in ADMINS:
         return True
 
-    required_channels = [ch for ch in [FORCESUB_CHANNEL, FORCESUB_CHANNEL2, FORCESUB_CHANNEL3] if ch]
+    required_channels = [ch for ch in [FORCESUB_CHANNEL, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNELS] if ch]
     member_status = {ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER}
 
     for channel_id in required_channels:
