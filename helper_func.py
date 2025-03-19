@@ -10,27 +10,74 @@ from config import FORCESUB_CHANNEL, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNELS, ADMI
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
 from pyrogram.errors import FloodWait
 
-async def is_subscribed(filter, client, update):
-    """Check if a user is subscribed to the required channels."""
-    if not any([FORCESUB_CHANNEL, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNELS]):
+async def subsch1(filter, client, update):
+    if not FORCESUB_CHANNEL:
         return True
-
     user_id = update.from_user.id
     if user_id in ADMINS:
         return True
+    try:
+        member = await client.get_chat_member(
+            chat_id=FORCESUB_CHANNEL, user_id=user_id
+        )
+    except UserNotParticipant:
+        return False
 
-    required_channels = [ch for ch in [FORCESUB_CHANNEL, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNELS] if ch]
-    member_status = {ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER}
+    return member.status in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER]
 
-    for channel_id in required_channels:
-        try:
-            member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
-            if member.status not in member_status:
-                return False
-        except UserNotParticipant:
-            return False
 
-    return True
+async def subsch2(filter, client, update):
+    if not FORCE_SUB_CHANNEL:
+        return True
+    user_id = update.from_user.id
+    if user_id in ADMINS:
+        return True
+    try:
+        member = await client.get_chat_member(chat_id=FORCE_SUB_CHANNEL, user_id=user_id)
+    except UserNotParticipant:
+        return False
+
+    return member.status in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER]
+
+
+async def subsch3(filter, client, update):
+    if not FORCE_SUB_CHANNELS:
+        return True
+    user_id = update.from_user.id
+    if user_id in ADMINS:
+        return True
+    try:
+        member = await client.get_chat_member(chat_id=FORCE_SUB_CHANNELS, user_id=user_id)
+    except UserNotParticipant:
+        return False
+
+    return member.status in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER]
+
+async def is_subscribed(filter, client, update):
+    if not FORCESUB_CHANNEL:
+        return True
+    if not FORCE_SUB_CHANNEL:
+        return True
+    if not FORCE_SUB_CHANNELS:
+        return True
+    user_id = update.from_user.id
+    if user_id in ADMINS:
+        return True
+    try:
+        member = await client.get_chat_member(chat_id=FORCESUB_GROUP, user_id=user_id)
+    except UserNotParticipant:
+        return False
+    try:
+        member = await client.get_chat_member(chat_id=FORCE_SUB_CHANNEL, user_id=user_id)
+    except UserNotParticipant:
+        return False
+    try: 
+        member = await client.get_chat_member(chat_id=FORCE_SUB_CHANNELS, user_id=user_id)
+    except UserNotParticipant:
+        return False
+    return member.status in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER]
+
+
 
 async def encode(string):
     """Encode a string to Base64."""
@@ -84,5 +131,7 @@ async def get_message_id(client, message):
             return msg_id
 
     return 0
-
+subsch1 = filters.create(subschannel1)
+subsch2 = filters.create(subschannel2)
+subsch3 = filters.create(subschannel3)
 subscribed = filters.create(is_subscribed)
