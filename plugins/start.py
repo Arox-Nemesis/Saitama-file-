@@ -42,20 +42,20 @@ async def start_command(client: Client, message: Message):
                 await add_user(id)
             except:
                 pass
-
-    text = message.text
-    if len(text) > 7:  # Indentation fixed
+                text = message.text
+    if len(text)>7:
         try:
-            base64_string = message.text.split(" ", 1)[1]
-            _string = await decode(base64_string)
-            argument = _string.split("-")
-
-            if len(argument) == 3:
-                try:
-                    start = int(int(argument[1]) / abs(client.db_channel.id))
-                    end = int(int(argument[2]) / abs(client.db_channel.id))
-                except:
-                    return
+            base64_string = text.split(" ", 1)[1]
+        except:
+            return
+        string = await decode(base64_string)
+        argument = string.split("-")
+        if len(argument) == 3:
+            try:
+                start = int(int(argument[1]) / abs(client.db_channel.id))
+                end = int(int(argument[2]) / abs(client.db_channel.id))
+            except:
+                return
             if start <= end:
                 ids = range(start,end+1)
             else:
@@ -66,20 +66,18 @@ async def start_command(client: Client, message: Message):
                     i -= 1
                     if i < end:
                         break
-            elif len(argument) == 2:
-                try:
-                    ids = [int(int(argument[1]) / abs(client.db_channel.id))]
-                except:
-                    return
-
-            temp_msg = await message.reply("Please wait...")
+        elif len(argument) == 2:
             try:
-                messages = await get_messages(client, ids)
+                ids = [int(int(argument[1]) / abs(client.db_channel.id))]
             except:
-                await message.reply_text("Something went wrong..!")
                 return
-
-            await temp_msg.delete()
+        temp_msg = await message.reply("Please wait...")
+        try:
+            messages = await get_messages(client, ids)
+        except:
+            await message.reply_text("Something went wrong..!")
+            return
+        await temp_msg.delete()
             snt_msgs = []
 
             for msg in messages:
