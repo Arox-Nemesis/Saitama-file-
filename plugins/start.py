@@ -78,7 +78,9 @@ async def start_command(client: Client, message: Message):
             await message.reply_text("Something went wrong..!")
             return
         await temp_msg.delete()
-    
+        
+        snt_msgs = []
+        
             for msg in messages:
                 if bool(CUSTOM_CAPTION) & bool(msg.document):
                     CUSTOM_CAPTION.format(previouscaption="" if not msg.caption else msg.caption.html, filename=msg.document.file_name)
