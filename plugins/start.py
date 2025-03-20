@@ -56,14 +56,16 @@ async def start_command(client: Client, message: Message):
                     end = int(int(argument[2]) / abs(client.db_channel.id))
                 except:
                     return
-
-                ids = range(start, end + 1) if start <= end else []
-                if start > end:
-                    i = start
-                    while i >= end:
-                        ids.append(i)
-                        i -= 1
-
+            if start <= end:
+                ids = range(start,end+1)
+            else:
+                ids = []
+                i = start
+                while True:
+                    ids.append(i)
+                    i -= 1
+                    if i < end:
+                        break
             elif len(argument) == 2:
                 try:
                     ids = [int(int(argument[1]) / abs(client.db_channel.id))]
@@ -81,38 +83,26 @@ async def start_command(client: Client, message: Message):
             snt_msgs = []
 
             for msg in messages:
-                caption = (
-                    CUSTOM_CAPTION.format(previouscaption="" if not msg.caption else msg.caption.html, 
-                                          filename=msg.document.file_name)
-                    if bool(CUSTOM_CAPTION) and bool(msg.document)
-                    else ("" if not msg.caption else msg.caption.html)
-                )
+                if bool(CUSTOM_CAPTION) & bool(msg.document):
+                    CUSTOM_CAPTION.format(previouscaption="" if not msg.caption else msg.caption.html, filename=msg.document.file_name)
+                 else:
+                    caption = "" if not msg.caption else msg.caption.html
 
-                reply_markup = None if DISABLE_CHANNEL_BUTTON else msg.reply_markup
-
+                if DISABLE_CHANNEL_BUTTON:
+                reply_markup = msg.reply_markup
+               else:
+                   reply_markup = None
                 try:
-                    snt_msg = await msg.copy(
-                        chat_id=message.from_user.id, 
-                        caption=caption, 
-                        parse_mode=ParseMode.HTML, 
-                        reply_markup=reply_markup, 
-                        protect_content=PROTECT_CONTENT
-                    )
+                    snt_msg = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
                     await asyncio.sleep(0.5)
                     snt_msgs.append(snt_msg)
                 except FloodWait as e:
                     await asyncio.sleep(e.x)
-                    snt_msg = await msg.copy(
-                        chat_id=message.from_user.id, 
-                        caption=caption, 
-                        parse_mode=ParseMode.HTML, 
-                        reply_markup=reply_markup, 
-                        protect_content=PROTECT_CONTENT
-                    )
+                    snt_msg = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
                     snt_msgs.append(snt_msg)
                 except:
                     pass
-
+                    
             SD = await message.reply_text("Baka! Files will be deleted After 600 seconds. Save them to the Saved Message now!")
             await asyncio.sleep(600)
 
