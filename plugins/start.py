@@ -137,14 +137,6 @@ REPLY_ERROR = "<code>Use this command as a reply to any telegram message without
 
 @Bot.on_message(filters.command('start') & filters.private)
 async def not_joined(client: Client, message: Message):
-    try:
-        invitelink1 = await client.create_chat_invite_link(FORCESUB_CHANNEL)
-        invitelink2 = await client.create_chat_invite_link(FORCE_SUB_CHANNEL)
-        invitelink3 = await client.create_chat_invite_link(FORCE_SUB_CHANNELS)
-    except Exception as e:
-        logging.error(f"Error generating invite links: {e}")
-        await message.reply("Error fetching channel invite links.")
-        return
     buttons = [
         [
             InlineKeyboardButton(text="• ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ", url=client.invitelink1),
@@ -168,12 +160,12 @@ async def not_joined(client: Client, message: Message):
         pass
 
     await message.reply(
-        text=FORCE_MSG.format(
-            first=message.from_user.first_name,
-            last=message.from_user.last_name,
-            username=None if not message.from_user.username else '@' + message.from_user.username,
-            mention=message.from_user.mention,
-            id=message.from_user.id
+        text = FORCE_MSG.format(
+            first = message.from_user.first_name,
+            last = message.from_user.last_name,
+            username = None if not message.from_user.username else '@' + message.from_user.username,
+            mention = message.from_user.mention,
+            id = message.from_user.id
         ),
         reply_markup=InlineKeyboardMarkup(buttons),
         quote=True,
