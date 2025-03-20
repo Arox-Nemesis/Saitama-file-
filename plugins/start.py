@@ -49,7 +49,7 @@ async def start_command(client: Client, message: Message):
         except:
             return
         _string = await decode(base64_string)
-            argument = _string.split("-")
+        argument = _string.split("-")
             if len(argument) == 3:
                 try:
                     start = int(int(argument[1]) / abs(client.db_channel.id))
@@ -79,10 +79,10 @@ async def start_command(client: Client, message: Message):
                 return
             await temp_msg.delete()
         
-        snt_msgs = []
+            snt_msgs = []
         
             for msg in messages:
-                if bool(CUSTOM_CAPTION) & bool(msg.document):
+                if bool(CUSTOM_CAPTION) and bool(msg.document):
                     CUSTOM_CAPTION.format(previouscaption="" if not msg.caption else msg.caption.html, filename=msg.document.file_name)
                else:
                     caption = "" if not msg.caption else msg.caption.html
